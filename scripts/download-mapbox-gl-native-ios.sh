@@ -1,6 +1,7 @@
 #!/bin/sh
 
 VERSION=$1
+FILENAME=../../../../mapbox-ios-sdk-$VERSION-dynamic.zip
 
 echo "Downloading Mapbox GL iOS $VERSION, this may take a minute."
 cd ios/
@@ -13,7 +14,12 @@ if [ -d ./Mapbox.framework ]; then
     rm -rf ./Mapbox.framework
 fi
 
-curl -sS https://mapbox.s3.amazonaws.com/mapbox-gl-native/ios/builds/mapbox-ios-sdk-$VERSION-dynamic.zip > temp.zip
+if [ -e $FILENAME ]; then
+	cp $FILENAME temp.zip
+else
+    curl -sS https://mapbox.s3.amazonaws.com/mapbox-gl-native/ios/builds/mapbox-ios-sdk-$VERSION-dynamic.zip > temp.zip
+fi
+
 unzip -o temp.zip -d temp
 mv temp/dynamic/Mapbox.framework ./Mapbox.framework
 rm -r temp
